@@ -1,0 +1,42 @@
+package sample2;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+
+public class cleartrip {
+                public static void main(String[] args) throws InterruptedException
+                {
+                System.setProperty("webdriver.chrome.driver", "C:\\Users\\PALANI14\\Desktop\\Selenium\\chromedriver.exe");
+                ChromeOptions options=new ChromeOptions(); 
+                options.addArguments("--disable-notifications");
+//            System.setProperty("webdriver.ie.driver","C:\\Program Files\\Selenium\\Drivers\\IEDriver\\IEDriverServer.exe");
+//            webDriver = new InternetExplorerDriver();
+                WebDriver driver=new ChromeDriver(options);
+                driver.get("https://www.cleartrip.com/");
+                driver.manage().window().maximize();
+                Thread.sleep(2000);
+                driver.findElement(By.xpath("//input[@id='RoundTrip']")).click();
+                driver.findElement(By.xpath("//input[@id='FromTag']")).click();
+                driver.findElement(By.xpath("//input[@id='FromTag']")).sendKeys("coimbatore");
+                Thread.sleep(5000);
+       driver.findElement(By.xpath("//input[@id='FromTag']")).sendKeys(Keys.chord(Keys.ARROW_DOWN,Keys.ENTER));
+                driver.findElement(By.xpath("//input[@id='ToTag']")).click();
+                driver.findElement(By.xpath("//input[@id='ToTag']")).sendKeys("chennai");
+                Thread.sleep(5000);
+             driver.findElement(By.xpath("//input[@id='ToTag']")).sendKeys(Keys.chord(Keys.ARROW_DOWN,Keys.ENTER));
+                driver.findElement(By.xpath("//input[@id='DepartDate']")).click();
+                driver.findElement(By.xpath("(//a[text()='14'])[1]")).click();
+                Thread.sleep(2000);
+                driver.findElement(By.xpath("//input[@id='ReturnDate']")).click();
+                driver.findElement(By.xpath("(//a[text()='22'])[2]")).click();
+                Thread.sleep(2000);
+                driver.findElement(By.xpath("//input[@id='SearchBtn']")).click();
+                Thread.sleep(20000);
+
+                driver.close();
+                
+                }
+}
