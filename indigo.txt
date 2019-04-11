@@ -1,0 +1,48 @@
+
+package Travel;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+//import org.openqa.selenium.ie.InternetExplorerDriver;
+//import org.openqa.selenium.support.ui.Select;
+
+public class Search {
+
+	public static void main(String[] args) throws InterruptedException {
+		System.setProperty("webdriver.chrome.driver","C:\\Users\\N285385\\eclipse-workspace\\Travel\\chromedriver.exe");
+		ChromeOptions options=new ChromeOptions();
+		options.addArguments("--Disable-Notifications");
+		//System.setProperty("webdriver.ie.driver", "C:\\Users\\N285385\\eclipse-workspace\\Travel\\Internetexplorerdriver.exe");
+		//WebDriver IEdriver=new InternetExplorerDriver();
+		WebDriver driver=new ChromeDriver(options);
+		driver.get("https://www.goindigo.in/");
+		driver.manage().window().maximize();
+		Thread.sleep(3000);
+		driver.findElement(By.xpath("(//input[@type='radio'])[1]")).click();
+		driver.findElement(By.xpath("(//input[@placeholder='From'])[1]")).click();
+		driver.findElement(By.xpath("(//input[@placeholder='From'])[1]")).sendKeys("Kolkata(CCU)");
+	
+		driver.findElement(By.xpath("(//input[@placeholder='From'])[1]")).sendKeys(Keys.chord(Keys.ENTER));
+		driver.findElement(By.xpath("(//input[@placeholder='To'])[1]")).click();
+		driver.findElement(By.xpath("(//input[@placeholder='To'])[1]")).sendKeys("DELHI");
+		Thread.sleep(2000);
+		driver.findElement(By.xpath("(//input[@placeholder='To'])[1]")).sendKeys(Keys.chord(Keys.ENTER));
+		driver.findElement(By.xpath("(//input[@placeholder='Departure Date'])[1]")).click();
+		driver.findElement(By.xpath("(//a[text()='30'])[2]")).click();
+		Thread.sleep(1000);
+		
+		driver.findElement(By.xpath("(//input[@type='text'])[22]")).click();
+		driver.findElement(By.xpath("(//span[@class='icon-plus'])[1]")).click();
+		driver.findElement(By.xpath("(//button[@type='button'])[8]")).click();
+		Thread.sleep(2000);
+		driver.findElement(By.xpath("(//button[@type='submit'])[1]")).click();
+		Thread.sleep(9000);
+		WebElement flight=driver.findElement(By.xpath("(//span[@class='flightNo'])[1]"));
+		String Display=flight.getText();
+		System.out.print("Flight ID is :"+Display);
+		driver.close();
+}
+}
