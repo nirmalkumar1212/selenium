@@ -40,3 +40,37 @@ public class cleartrip {
                 
                 }
 }
+
+
+FileInputStream ip;
+              
+              
+              Properties prop=new Properties();
+              
+                     ip=new FileInputStream("C:\\Users\\N292884\\eclipse-workspace\\Selenium_Sample_Projects\\Config\\Config.properties");
+                     prop.load(ip);
+                     System.out.println(prop.getProperty("location"));
+                     String web=prop.getProperty("path");
+                     String loc=prop.getProperty("location");
+                     System.setProperty(web,loc);
+                     WebDriver driver = new ChromeDriver();
+                     String url1=prop.getProperty("url");
+                     driver.get(url1);
+                     Thread.sleep(2000);
+                     System.out.println(url1);
+                     driver.close();
+                     
+                     
+                     
+                     
+                     path=webdriver.chrome.driver
+location=C:\\Program Files (x86)\\SeleniumJava\\chromedriver.exe
+url=https://www.cleartrip.com
+excel=C:\\Users\\N292884\\eclipse-workspace\\Selenium_Sample_Projects\\Value.xlsx
+String ro=prop.getProperty("round");
+			driver.findElement(By.xpath(ro)).click();
+
+
+
+
+
