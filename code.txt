@@ -71,6 +71,9 @@ String ro=prop.getProperty("round");
 			driver.findElement(By.xpath(ro)).click();
 
 
-
+TakesScreenshot tk = (TakesScreenshot)driver;
+		File f = tk.getScreenshotAs(OutputType.FILE);
+		File f1=new File(System.getProperty("user.dir")+"/sample.png");
+		FileUtils.copyFile(f,f1 ); 
 
 
