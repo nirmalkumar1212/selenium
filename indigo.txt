@@ -1,48 +1,222 @@
 
+package Excel;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Properties;
+
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+public class ExcelFile {
+       
+
+         FileInputStream read;
+         XSSFWorkbook wb;
+         XSSFSheet sheet1;
+         
+       public ExcelFile() throws IOException {
+              
+              FileInputStream ip; 
+        Properties prop=new Properties();
+        ip=new FileInputStream("C:\\Users\\701288\\eclipse-workspace\\Travel\\Config\\Config.properties");
+         prop.load(ip);
+           
+              //Reading data from Excel
+        String File=prop.getProperty("excel");
+        read=new FileInputStream(File);
+        wb=new XSSFWorkbook(read);
+        wb.close();
+       }
+       
+       public String getdata(int sheet2,int row,int column)  
+       {
+              
+           
+       
+   sheet1=wb.getSheetAt(sheet2);
+   String result=sheet1.getRow(row).getCell(column).getStringCellValue();
+return result;
+       
+}
+}
+Testng.xml to parallel running of browsers
+<?xml version="1.0" encoding="UTF-8"?>
+<suite name="Travel" parallel="tests">
+  <test name="Test">
+  
+  <parameter name="Browser" value="chrome">
+  </parameter>
+    <classes>
+      <class name="Travel.Travel"/>
+    </classes>
+  </test> <!-- Test -->
+   <test name="Test1">
+  
+  <parameter name="Browser" value="ie">
+  </parameter>
+    <classes>
+      <class name="Travel.Travel"/>
+    </classes>
+  </test> <!-- Test -->
+</suite> <!-- Suite -->
+
+Config.properties file
+
+path=webdriver.chrome.driver
+location=C:\\chrome\\chromedriver.exe
+path1=webdriver.ie.driver
+location1=C:\\Users\\701288\\eclipse-workspace\\Travel\\IEDriverServer.exe
+url=https://www.cleartrip.com/
+excel=C:\\Users\\701288\\eclipse-workspace\\Travel\\Book1.xlsx
+round=//input[@id='RoundTrip']
+From=//input[@id='FromTag']
+To=//input[@id='ToTag']
+Depart=//input[@id='DepartDate']
+Return=//input[@id='ReturnDate']
+Adults=//select[@id='Adults']
+Searchbutton=//input[@id='SearchBtn']
+
+Main pgm 
 package Travel;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-//import org.openqa.selenium.ie.InternetExplorerDriver;
-//import org.openqa.selenium.support.ui.Select;
+import org.testng.annotations.Test;
+import Excel.ExcelFile;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
 
-public class Search {
+  import org.apache.poi.xssf.usermodel.XSSFSheet;
+                import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+                import org.openqa.selenium.By;
+                import org.openqa.selenium.JavascriptExecutor;
+                import org.openqa.selenium.Keys;
+                import org.openqa.selenium.WebDriver;
+                //import org.openqa.selenium.WebDriver.Options;
+                //import org.openqa.selenium.WebElement;
+                import org.openqa.selenium.chrome.ChromeDriver;
+                import org.openqa.selenium.chrome.ChromeOptions;
+                import org.openqa.selenium.ie.InternetExplorerDriver;
+                //import org.openqa.selenium.ie.InternetExplorerOptions;
+                import org.openqa.selenium.support.ui.Select;
+                import org.openqa.selenium.support.ui.WebDriverWait;
+                import org.testng.annotations.Parameters;
+                import org.testng.annotations.AfterTest;
+                import org.testng.annotations.BeforeTest;
 
-	public static void main(String[] args) throws InterruptedException {
-		System.setProperty("webdriver.chrome.driver","C:\\Users\\N285385\\eclipse-workspace\\Travel\\chromedriver.exe");
-		ChromeOptions options=new ChromeOptions();
-		options.addArguments("--Disable-Notifications");
-		//System.setProperty("webdriver.ie.driver", "C:\\Users\\N285385\\eclipse-workspace\\Travel\\Internetexplorerdriver.exe");
-		//WebDriver IEdriver=new InternetExplorerDriver();
-		WebDriver driver=new ChromeDriver(options);
-		driver.get("https://www.goindigo.in/");
-		driver.manage().window().maximize();
-		Thread.sleep(3000);
-		driver.findElement(By.xpath("(//input[@type='radio'])[1]")).click();
-		driver.findElement(By.xpath("(//input[@placeholder='From'])[1]")).click();
-		driver.findElement(By.xpath("(//input[@placeholder='From'])[1]")).sendKeys("Kolkata(CCU)");
-	
-		driver.findElement(By.xpath("(//input[@placeholder='From'])[1]")).sendKeys(Keys.chord(Keys.ENTER));
-		driver.findElement(By.xpath("(//input[@placeholder='To'])[1]")).click();
-		driver.findElement(By.xpath("(//input[@placeholder='To'])[1]")).sendKeys("DELHI");
-		Thread.sleep(2000);
-		driver.findElement(By.xpath("(//input[@placeholder='To'])[1]")).sendKeys(Keys.chord(Keys.ENTER));
-		driver.findElement(By.xpath("(//input[@placeholder='Departure Date'])[1]")).click();
-		driver.findElement(By.xpath("(//a[text()='30'])[2]")).click();
-		Thread.sleep(1000);
-		
-		driver.findElement(By.xpath("(//input[@type='text'])[22]")).click();
-		driver.findElement(By.xpath("(//span[@class='icon-plus'])[1]")).click();
-		driver.findElement(By.xpath("(//button[@type='button'])[8]")).click();
-		Thread.sleep(2000);
-		driver.findElement(By.xpath("(//button[@type='submit'])[1]")).click();
-		Thread.sleep(9000);
-		WebElement flight=driver.findElement(By.xpath("(//span[@class='flightNo'])[1]"));
-		String Display=flight.getText();
-		System.out.print("Flight ID is :"+Display);
-		driver.close();
-}
-}
+                
+             public class Travel  {
+            
+              FileInputStream ip; 
+              Properties prop=new Properties();
+            
+                  
+                      WebDriver driver;
+                    @Parameters("Browser")
+                      @BeforeTest
+                      public void launch(String b) throws IOException, InterruptedException
+                      {
+                            ip=new FileInputStream("C:\\Users\\701288\\eclipse-workspace\\Travel\\Config\\Config.properties");
+                        prop.load(ip);
+                           
+                           
+                           if(b.equalsIgnoreCase("chrome"))
+                           {
+                                  
+                               String web=prop.getProperty("path");
+                             String loc=prop.getProperty("location");
+                           
+                            System.setProperty(web,loc);
+                                  ChromeOptions options=new ChromeOptions(); 
+                          options.addArguments("--disable-notifications");
+                         
+                       driver=new ChromeDriver(options);
+                      }
+                           else if(b.equalsIgnoreCase("ie"))
+                           {
+                                  String web1=prop.getProperty("path1");
+                             String loc1=prop.getProperty("location1");
+                                  System.setProperty(web1,loc1);
+                                 driver= new InternetExplorerDriver();
+                                // InternetExplorerOptions options1=new InternetExplorerOptions();               
+                      }
+                            String url1=prop.getProperty("url");
+                           driver.get(url1);
+                       driver.manage().window().maximize();
+                      String ro=prop.getProperty("round");
+                      System.out.println(ro);
+                           
+                       
+                      
+                       
+                             driver.findElement(By.xpath(ro)).click();
+                             Thread.sleep(5000);
+                      }
+                    
+          @Test           
+        public void ClearTrip() throws InterruptedException, IOException {
+                 /* JavascriptExecutor js=(JavascriptExecutor) driver;
+                      System.out.println(""+js);
+                      WebDriverWait wait=new WebDriverWait(driver,20);
+                      System.out.println(""+wait);*/
+                    
+                           
+                      
+                      ExcelFile clone=new ExcelFile();
+                     
+                           //From tag
+                      String b= clone.getdata(0, 0, 0);
+                      
+                       
+                           String frompath=prop.getProperty("From");
+                      driver.findElement(By.xpath(frompath)).sendKeys(b);
+                      Thread.sleep(3000);
+                      driver.findElement(By.xpath(frompath)).sendKeys(Keys.chord(Keys.ARROW_DOWN,Keys.ENTER));
+                      
+                    //To tag
+                      String c= clone.getdata(0, 1, 0);
+                      String Topath=prop.getProperty("To");
+                     driver.findElement(By.xpath(Topath)).sendKeys(c);
+                     Thread.sleep(3000);
+                     driver.findElement(By.xpath(Topath)).sendKeys(Keys.chord(Keys.ARROW_DOWN,Keys.ENTER));
+                     Thread.sleep(2000);
+                     
+                     //from date
+                     
+                     String d= clone.getdata(0, 2, 0);
+                     String Departpath=prop.getProperty("Depart");
+                     driver.findElement(By.xpath(Departpath)).sendKeys(d);
+                     Thread.sleep(3000);
+                    
+                     //Return date
+                     String e= clone.getdata(0, 3, 0);
+                     String Returnpath=prop.getProperty("Return");
+                     driver.findElement(By.xpath(Returnpath)).sendKeys(e);
+                   Thread.sleep(3000);            
+                      
+                      //select Adults
+                     String Adultspath=prop.getProperty("Adults");
+                    driver.findElement(By.xpath(Adultspath)).click();
+                  
+                         driver.findElement(By.xpath(Adultspath)).sendKeys("3",Keys.chord(Keys.ENTER));
+                    Thread.sleep(1000);
+                    
+                  
+                    
+                    //select Child
+                 
+                    Select chi=new Select(driver.findElement(By.name("childs")));
+                      chi.selectByIndex(3); 
+                      Thread.sleep(1000);
+                    
+                    //click Search
+                      String SearchbtnPath=prop.getProperty("Searchbutton");
+                      driver.findElement(By.xpath(SearchbtnPath)).click();
+                      Thread.sleep(20000);
+                  }
+                  @AfterTest
+                  public void close()
+                  {
+                      driver.close();
+                  }
+                }
